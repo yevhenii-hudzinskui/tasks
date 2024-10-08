@@ -24,7 +24,21 @@ class TaskController extends Controller
         return to_route("tasks.index");
     }
 
-//    public function edit(Task $task){
-//        dd($task->name, $task->id);
-//    }
+    public function update(Task $task, Request $request){
+        $task->update($request->only(['name', 'description']));
+        return to_route("tasks.index");
+    }
+
+    public function edit(Task $task){
+        return view('tasks.edit', ['task' => $task]);
+    }
+
+    public function show(Task $task){
+        return view('tasks.show', ['task' => $task]);
+    }
+
+    public function destroy(Task $task){
+        $task->delete();
+        return to_route("tasks.index");
+    }
 }
