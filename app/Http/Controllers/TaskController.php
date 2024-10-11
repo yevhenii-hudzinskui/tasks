@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreTaskRequest;
+use App\Http\Requests\UpdateTaskRequest;
 use App\Models\Task;
-use Illuminate\Http\Request;
 
 class TaskController extends Controller
 {
@@ -18,14 +19,15 @@ class TaskController extends Controller
         return view('tasks.create');
     }
 
-    public function store(Request $request){
-        Task::create($request->only(['name', 'description']));
+    public function store(StoreTaskRequest $request){
+        Task::create($request->safe()->only(['name', 'description']));
 
         return to_route("tasks.index");
     }
 
-    public function update(Task $task, Request $request){
-        $task->update($request->only(['name', 'description']));
+    public function update(Task $task, UpdateTaskRequest $request){
+        $task->update($request->safe()->only(['name', 'description']));
+
         return to_route("tasks.index");
     }
 
