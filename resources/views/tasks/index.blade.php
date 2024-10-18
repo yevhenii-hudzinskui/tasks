@@ -2,6 +2,17 @@
    My tasks
 </div>
 <a href="{{ route('tasks.create') }}">Add new tasks</a>
+
+<form method="GET" action="{{ route('tasks.index') }}">
+    <label> Search
+        <input type="text" name="search" value="{{ request('search') }}">
+    </label>
+    <label> With deleted
+        <input type="checkbox" name="deleted" value="1" @checked(request('deleted'))>
+    </label>
+    <button type="submit">Search</button>
+</form>
+
 <table>
     <thead>
     <tr>
@@ -9,6 +20,7 @@
         <th>Name</th>
         <th>Description</th>
         <th>Completed</th>
+        <th>Deleted</th>
         <th>Actions</th>
     </tr>
     </thead>
@@ -23,6 +35,7 @@
                 </td>
                 <td>{{ $task->description }}</td>
                 <td>{{ $task->compaleted }}</td>
+                <td>{{ $task->deleted_at }}</td>
                 <td>
                     <a href="{{ route('tasks.edit', $task) }}">edit</a> |
                     <a href="{{ route('tasks.show', $task) }}">show</a>
@@ -31,3 +44,5 @@
         @endforeach
     </tbody>
 </table>
+
+{{ $tasks->links() }}

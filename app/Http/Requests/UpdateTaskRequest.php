@@ -9,7 +9,7 @@ class UpdateTaskRequest extends FormRequest
     public function rules(): array
     {
         return [
-//            'name' => ['required','max:5'], //'required|max:5',
+            'name' => ['required','max:255'],
             'description' => 'required'
         ];
     }

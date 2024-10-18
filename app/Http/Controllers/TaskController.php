@@ -5,11 +5,25 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
 use App\Models\Task;
+use Illuminate\Database\Query\Builder;
+use Illuminate\Http\Request;
 
 class TaskController extends Controller
 {
-    public function index(){
-        $tasks = Task::all();
+    public function index(Request $request){
+        $search = $request->query('search');
+        $deleted = $request->query('deleted');
+
+        $tasks = Task::query()
+        ->when($search, function ($query, string $search) {
+            $query->where('name', '=', $search);
+        })
+        ->when($deleted, function ($query) {
+            $query->withTrashed();
+        })
+        ->simplePaginate(15)
+        ->withQueryString();
+
 
         return view('tasks.index')
             ->with('tasks', $tasks);
