@@ -16,4 +16,9 @@ class Task extends Model
         'name',
         'description'
     ];
+
+    public function status(): string
+    {
+        return $this->trashed() ? 'Deleted' : 'Active';
+    }
 }

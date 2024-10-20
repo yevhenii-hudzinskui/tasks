@@ -12,6 +12,7 @@ class TaskController extends Controller
     public function index(Request $request){
         $search = $request->query('search');
         $deleted = $request->query('deleted');
+        $sort = $request->query('sort', 'a-z');
 
         $tasks = Task::query()
         ->when($search, function ($query, string $search) {
@@ -20,6 +21,15 @@ class TaskController extends Controller
         ->when($deleted, function ($query) {
             $query->withTrashed();
         })
+        ->when(
+            $sort == 'z-a',
+            function ($query) {
+                $query->orderByDesc('name');
+            },
+            function ($query) {
+                $query->orderBy('name');
+            }
+        )
         ->simplePaginate(15)
         ->withQueryString();
 
